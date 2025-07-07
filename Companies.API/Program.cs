@@ -1,4 +1,6 @@
 
+using Companies.API.Middleware;
+
 namespace Companies.API
 {
     public class Program
@@ -42,6 +44,8 @@ namespace Companies.API
             //        await context.Response.WriteAsync("Hello from /demo path");
             //    });
             //});
+
+            app.UseDemoMiddleware();
 
 
             app.MapControllers();
