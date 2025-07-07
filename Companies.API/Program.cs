@@ -22,6 +22,8 @@ namespace Companies.API
 
             builder.Services.AddHostedService<DataSeedHostingService>();
 
+            builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

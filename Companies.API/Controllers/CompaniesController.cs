@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Companies.API.Data;
 using Companies.API.Entities;
 using Companis.Shared;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Companies.API.Controllers
 {
@@ -16,25 +18,39 @@ namespace Companies.API.Controllers
     public class CompaniesController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public CompaniesController(ApplicationDbContext context)
+        public CompaniesController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         // GET: api/Companies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany()
         {
-            var dtos = context.Companies.Select(c => new CompanyDto
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Address = c.Address,
-                Country = c.Country
-            });
+            //In Memeory
+            var companies = await context.Companies.ToListAsync();
+            var demoDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
 
-            return Ok( await dtos.ToListAsync());
+            //Project 1
+            var demoDto1 = await context.Companies.ProjectTo<CompanyDto>(mapper.ConfigurationProvider).ToListAsync();
+
+            //Project 2
+            var demoDto2 = await mapper.ProjectTo<CompanyDto>(context.Companies).ToListAsync();
+
+            //Select manual mapping
+            var dtos = await context.Companies.Select(c => new CompanyDto
+                                    {
+                                        Id = c.Id,
+                                        Name = c.Name,
+                                        Address = c.Address,
+                                        Country = c.Country
+                                    })
+                                    .ToListAsync();
+
+            return Ok(dtos);
         }
 
         //// GET: api/Companies/5
