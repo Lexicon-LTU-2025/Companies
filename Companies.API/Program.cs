@@ -3,6 +3,7 @@ using Companies.API.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Companies.API.Data;
+using Companies.API.Services;
 
 namespace Companies.API
 {
@@ -18,6 +19,8 @@ namespace Companies.API
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddHostedService<DataSeedHostingService>();
 
             var app = builder.Build();
 
