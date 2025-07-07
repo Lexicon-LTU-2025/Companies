@@ -45,7 +45,7 @@ namespace Companies.API
             //    });
             //});
 
-            app.UseDemoMiddleware();
+            // app.UseDemoMiddleware();
 
 
             app.MapControllers();
