@@ -97,21 +97,17 @@ namespace Companies.API.Controllers
             return CreatedAtAction(nameof(GetCompany), new { id = createdDto.Id }, createdDto);
         }
 
-        //// DELETE: api/Companies/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteCompany(Guid id)
-        //{
-        //    var company = await context.Companies.FindAsync(id);
-        //    if (company == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteCompany(Guid id)
+        {
+            var company = await context.Companies.FindAsync(id);
+            if (company == null) return NotFound();
+            
+            context.Companies.Remove(company);
+            await context.SaveChangesAsync();
 
-        //    context.Companies.Remove(company);
-        //    await context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         //private bool CompanyExists(Guid id)
         //{
