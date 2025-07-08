@@ -12,7 +12,7 @@ using Companis.Shared;
 
 namespace Companies.API.Controllers
 {
-    [Route("api/companies/{companyId}/employees")]
+    [Route("api/companies/{companyId:guid}/employees")]
     [ApiController]
     public class EmployeesController : ControllerBase
     {
@@ -94,21 +94,27 @@ namespace Companies.API.Controllers
         //    return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
         //}
 
-        //// DELETE: api/Employees/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteEmployee(Guid id)
-        //{
-        //    var employee = await context.Employee.FindAsync(id);
-        //    if (employee == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteEmployee(Guid companyId, Guid id)
+        {
+            var companyExists = await context.Companies
+                                          .AnyAsync(c => c.Id == companyId);
 
-        //    context.Employee.Remove(employee);
-        //    await context.SaveChangesAsync();
+            if(!companyExists) return Problem(
+                 statusCode: StatusCodes.Status404NotFound,
+                 title :    "Company not found",
+                 detail : $"Company with id:{companyId} could not be located"
+                );
 
-        //    return NoContent();
-        //}
+            var employee = await context.Employees.FirstOrDefaultAsync(e => e.Id == id && e.CompanyId == companyId);
+            
+            if(employee == null) return NotFound();
+
+            context.Employees.Remove(employee);
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
         //private bool EmployeeExists(Guid id)
         //{
