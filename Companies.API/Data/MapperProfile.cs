@@ -8,7 +8,11 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<Company, CompanyDto>();
+        CreateMap<Company, CompanyDto>()
+            .ForMember(dest => dest.Address, opt =>
+              opt.MapFrom(src => 
+              $"{src.Address}{(string.IsNullOrEmpty(src.Country) ? string.Empty : ", ")}{src.Country}"));
+
         CreateMap<CompanyCreateDto, Company>();
 
 

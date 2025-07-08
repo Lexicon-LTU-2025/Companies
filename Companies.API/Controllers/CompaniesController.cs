@@ -39,17 +39,17 @@ namespace Companies.API.Controllers
             //var demoDto1 = await context.Companies.ProjectTo<CompanyDto>(mapper.ConfigurationProvider).ToListAsync();
 
             ////Project 2
-            //var demoDto2 = await mapper.ProjectTo<CompanyDto>(context.Companies).ToListAsync();
+            var dtos = await mapper.ProjectTo<CompanyDto>(context.Companies).ToListAsync();
 
             //Select manual mapping
-            var dtos = await context.Companies.Select(c => new CompanyDto
-                                    {
-                                        Id = c.Id,
-                                        Name = c.Name,
-                                        Address = c.Address,
-                                        Country = c.Country
-                                    })
-                                    .ToListAsync();
+            //var dtos = await context.Companies.Select(c => new CompanyDto
+            //                        {
+            //                            Id = c.Id,
+            //                            Name = c.Name,
+            //                            Address = c.Address,
+            //                            Country = c.Country
+            //                        })
+            //                        .ToListAsync();
 
             return Ok(dtos);
         }
