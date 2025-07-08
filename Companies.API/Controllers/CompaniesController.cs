@@ -29,7 +29,7 @@ namespace Companies.API.Controllers
 
         // GET: api/Companies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany()
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
         {
             ////In Memory
             //var companies = await context.Companies.ToListAsync();
@@ -39,7 +39,8 @@ namespace Companies.API.Controllers
             //var demoDto1 = await context.Companies.ProjectTo<CompanyDto>(mapper.ConfigurationProvider).ToListAsync();
 
             ////Project 2
-            var dtos = await mapper.ProjectTo<CompanyDto>(context.Companies).ToListAsync();
+            var dtos = includeEmployees ? mapper.Map<IEnumerable<CompanyDto>>(await context.Companies.Include(c => c.Employees).ToListAsync()) :
+                                          mapper.Map<IEnumerable<CompanyDto>>(await context.Companies.ToListAsync());
 
             //Select manual mapping
             //var dtos = await context.Companies.Select(c => new CompanyDto
