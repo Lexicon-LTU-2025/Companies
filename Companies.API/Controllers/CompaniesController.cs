@@ -10,6 +10,7 @@ using Companies.API.Entities;
 using Companis.Shared;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using System.Runtime.CompilerServices;
 
 namespace Companies.API.Controllers
 {
@@ -30,15 +31,15 @@ namespace Companies.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany()
         {
-            //In Memeory
-            var companies = await context.Companies.ToListAsync();
-            var demoDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
+            ////In Memory
+            //var companies = await context.Companies.ToListAsync();
+            //var demoDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
 
-            //Project 1
-            var demoDto1 = await context.Companies.ProjectTo<CompanyDto>(mapper.ConfigurationProvider).ToListAsync();
+            ////Project 1
+            //var demoDto1 = await context.Companies.ProjectTo<CompanyDto>(mapper.ConfigurationProvider).ToListAsync();
 
-            //Project 2
-            var demoDto2 = await mapper.ProjectTo<CompanyDto>(context.Companies).ToListAsync();
+            ////Project 2
+            //var demoDto2 = await mapper.ProjectTo<CompanyDto>(context.Companies).ToListAsync();
 
             //Select manual mapping
             var dtos = await context.Companies.Select(c => new CompanyDto
@@ -98,16 +99,19 @@ namespace Companies.API.Controllers
         //    return NoContent();
         //}
 
-        //// POST: api/Companies
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Company>> PostCompany(Company company)
-        //{
-        //    context.Companies.Add(company);
-        //    await context.SaveChangesAsync();
+        [HttpPost]
+        public async Task<ActionResult<CompanyDto>> PostCompany(CompanyCreateDto dto)
+        {
+            //var company = new Company { Name = dto.Name, Address = dto.Address, Country = dto.Country };
+            var company = mapper.Map<Company>(dto);
 
-        //    return CreatedAtAction("GetCompany", new { id = company.Id }, company);
-        //}
+            context.Companies.Add(company);
+            await context.SaveChangesAsync();
+
+            var createdDto = mapper.Map<CompanyDto>(company);
+
+            return CreatedAtAction(nameof(GetCompany), new { id = createdDto.Id }, createdDto);
+        }
 
         //// DELETE: api/Companies/5
         //[HttpDelete("{id}")]

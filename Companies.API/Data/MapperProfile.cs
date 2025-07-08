@@ -9,6 +9,9 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<Company, CompanyDto>();
+        CreateMap<CompanyCreateDto, Company>();
+
+
         CreateMap<Employee, EmployeeDto>();
     }
 }
