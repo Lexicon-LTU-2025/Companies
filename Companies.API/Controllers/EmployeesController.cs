@@ -9,6 +9,7 @@ using Companies.API.Data;
 using Companies.API.Entities;
 using AutoMapper;
 using Companis.Shared;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Companies.API.Controllers
 {
@@ -82,6 +83,37 @@ namespace Companies.API.Controllers
 
         //    return NoContent();
         //}
+
+        [HttpPatch("{id:guid}")]
+        public async Task<IActionResult> PatchEmployee(Guid companyId, Guid id, JsonPatchDocument<EmployeeUpdateDto> patchDocument)
+        {
+            if (patchDocument is null) return BadRequest(); //Use Problem();
+
+            var companyExists = await context.Companies
+                                          .AnyAsync(c => c.Id == companyId);
+
+            if (!companyExists) return Problem(
+                 statusCode: StatusCodes.Status404NotFound,
+                 title: "Company not found",
+                 detail: $"Company with id:{companyId} could not be located"
+                );
+
+            var employeeToPatch = await context.Employees.FirstOrDefaultAsync(e => e.Id == id && e.CompanyId == companyId);
+
+            if (employeeToPatch is null) return NotFound(); //Use Problem();
+
+            var employeeToPatchDto = mapper.Map<EmployeeUpdateDto>(employeeToPatch);
+
+            patchDocument.ApplyTo(employeeToPatchDto, ModelState);
+            TryValidateModel(employeeToPatchDto);
+
+            if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
+
+            mapper.Map(employeeToPatchDto, employeeToPatch);
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
         //// POST: api/Employees
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
