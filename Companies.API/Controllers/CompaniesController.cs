@@ -54,50 +54,34 @@ namespace Companies.API.Controllers
             return Ok(dtos);
         }
 
-        //// GET: api/Companies/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Company>> GetCompany(Guid id)
-        //{
-        //    var company = await context.Companies.FindAsync(id);
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<CompanyDto>> GetCompany(Guid id)
+        {
+            var dto = await mapper.ProjectTo<CompanyDto>(context.Companies.Where(c => c.Id == id))
+                                  .FirstOrDefaultAsync();
 
-        //    if (company == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (dto == null) return NotFound();
 
-        //    return company;
-        //}
+            return Ok(dto);
+        }
 
-        //// PUT: api/Companies/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutCompany(Guid id, Company company)
-        //{
-        //    if (id != company.Id)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    context.Entry(company).State = EntityState.Modified;
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> PutCompany(Guid id, CompanyUpdateDto dto)
+        {
+            if (id != dto.Id) return BadRequest();
 
-        //    try
-        //    {
-        //        await context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!CompanyExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            var existingCompany = await context.Companies.FirstOrDefaultAsync(c => c.Id == id);
 
-        //    return NoContent();
-        //}
+            if (existingCompany is null) return NotFound();
+
+            mapper.Map(dto, existingCompany);
+
+            await context.SaveChangesAsync();
+            
+            return Ok(mapper.Map<CompanyDto>(existingCompany)); //Just for demo!
+            //return NoContent();
+        }
 
         [HttpPost]
         public async Task<ActionResult<CompanyDto>> PostCompany(CompanyCreateDto dto)

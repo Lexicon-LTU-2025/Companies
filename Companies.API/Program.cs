@@ -36,24 +36,6 @@ namespace Companies.API
 
             app.UseAuthorization();
 
-            //app.Map("/demo", builder =>
-            //{
-            //    builder.Use(async (context, next) =>
-            //    {
-            //        Console.WriteLine("1. log BEFORE the next delegate");
-
-            //        await next.Invoke();
-
-            //        Console.WriteLine("3. log AFTER the next delegate");
-            //    });
-
-            //    builder.Run(async context =>
-            //    {
-            //        Console.WriteLine($"2. log in the Run method");
-            //        await context.Response.WriteAsync("Hello from /demo path");
-            //    });
-            //});
-
             // app.UseDemoMiddleware();
 
 
