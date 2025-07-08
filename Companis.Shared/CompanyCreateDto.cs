@@ -7,5 +7,8 @@ using System.Threading.Tasks;
 namespace Companis.Shared;
 
 
-public record CompanyCreateDto : CompanyManipulationDto { }
+public record CompanyCreateDto : CompanyManipulationDto 
+{
+    public IEnumerable<EmployeeDto>? Employees { get; init; }
+}
 
