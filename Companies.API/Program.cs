@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Companies.API.Data;
 using Companies.API.Services;
+using Companies.API.Extensions;
 
 namespace Companies.API
 {
@@ -13,35 +14,22 @@ namespace Companies.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContext") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.")));
-
+            builder.Services.ConfigureSql(builder.Configuration);
+            
             builder.Services.AddControllers()
                             .AddNewtonsoftJson();
 
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
-
             builder.Services.AddHostedService<DataSeedHostingService>();
-
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
-                });
-
-                options.AddPolicy("AllowAll", p =>
-                   p.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader());
-            });
+            builder.Services.ConfigureCors();
 
             var app = builder.Build();
+
+
+
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -51,7 +39,7 @@ namespace Companies.API
 
             app.UseHttpsRedirection();
 
-            app.UseCors(");
+            app.UseCors();
 
             app.UseAuthorization();
 
