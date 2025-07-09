@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Companies.API.Data;
+using Companis.Shared;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Companies.API.Data;
-using Companies.API.Entities;
-using Companis.Shared;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Cors;
 
 namespace Companies.API.Controllers
 {
@@ -81,7 +73,7 @@ namespace Companies.API.Controllers
             mapper.Map(dto, existingCompany);
 
             await context.SaveChangesAsync();
-            
+
             return Ok(mapper.Map<CompanyDto>(existingCompany)); //Just for demo!
             return NoContent();
         }
@@ -105,7 +97,7 @@ namespace Companies.API.Controllers
         {
             var company = await context.Companies.FindAsync(id);
             if (company == null) return NotFound();
-            
+
             context.Companies.Remove(company);
             await context.SaveChangesAsync();
 

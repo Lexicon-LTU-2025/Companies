@@ -1,5 +1,4 @@
-﻿using Companies.API.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Companies.API.Data.Configurations;

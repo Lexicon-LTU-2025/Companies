@@ -1,4 +1,4 @@
-﻿namespace Companies.API.Entities;
+﻿namespace Domain.Models.Entities;
 
 public class Company
 {

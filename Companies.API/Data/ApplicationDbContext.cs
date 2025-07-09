@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Companies.API.Data.Configurations;
 using Microsoft.EntityFrameworkCore;
-using Companies.API.Entities;
-using Companies.API.Data.Configurations;
 
 namespace Companies.API.Data
 {
@@ -13,7 +8,7 @@ namespace Companies.API.Data
         public DbSet<Company> Companies { get; set; } = default!;
         public DbSet<Employee> Employees { get; set; } = default!;
 
-        public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }

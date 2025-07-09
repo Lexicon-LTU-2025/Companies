@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
 using Companies.API.Data;
-using Companies.API.Entities;
-using AutoMapper;
 using Companis.Shared;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Companies.API.Controllers
 {
@@ -31,7 +25,7 @@ namespace Companies.API.Controllers
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployee(Guid companyId)
         {
             var companyExists = await context.Companies.AnyAsync(c => c.Id.Equals(companyId));
-            if(!companyExists) return NotFound();
+            if (!companyExists) return NotFound();
 
             var employees = await context.Employees.Where(e => e.CompanyId.Equals(companyId)).ToListAsync();
             var employeeDtos = mapper.Map<IEnumerable<EmployeeDto>>(employees);
@@ -132,15 +126,15 @@ namespace Companies.API.Controllers
             var companyExists = await context.Companies
                                           .AnyAsync(c => c.Id == companyId);
 
-            if(!companyExists) return Problem(
+            if (!companyExists) return Problem(
                  statusCode: StatusCodes.Status404NotFound,
-                 title :    "Company not found",
-                 detail : $"Company with id:{companyId} could not be located"
+                 title: "Company not found",
+                 detail: $"Company with id:{companyId} could not be located"
                 );
 
             var employee = await context.Employees.FirstOrDefaultAsync(e => e.Id == id && e.CompanyId == companyId);
-            
-            if(employee == null) return NotFound();
+
+            if (employee == null) return NotFound();
 
             context.Employees.Remove(employee);
             await context.SaveChangesAsync();

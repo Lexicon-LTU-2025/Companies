@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Companies.API.Entities;
 using Companis.Shared;
 
 namespace Companies.API.Data;
@@ -10,7 +9,7 @@ public class MapperProfile : Profile
     {
         CreateMap<Company, CompanyDto>()
             .ForMember(dest => dest.Address, opt =>
-              opt.MapFrom(src => 
+              opt.MapFrom(src =>
               $"{src.Address}{(string.IsNullOrEmpty(src.Country) ? string.Empty : ", ")}{src.Country}"));
 
         CreateMap<CompanyCreateDto, Company>();

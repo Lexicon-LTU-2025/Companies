@@ -1,7 +1,6 @@
 ﻿
 using Bogus;
 using Companies.API.Data;
-using Companies.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Companies.API.Services;
@@ -24,8 +23,8 @@ public class DataSeedHostingService : IHostedService
         var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
         if (!env.IsDevelopment()) return;
 
-        var context =  scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        if(await context.Companies.AnyAsync(cancellationToken)) return;
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        if (await context.Companies.AnyAsync(cancellationToken)) return;
 
         try
         {
@@ -56,7 +55,7 @@ public class DataSeedHostingService : IHostedService
 
     private static List<Employee> GenerateEmployees(int numberOfEmplyees)
     {
-        string[] positions = ["Developer", "Tester", "Manager"]; 
+        string[] positions = ["Developer", "Tester", "Manager"];
 
         var faker = new Faker<Employee>("sv").Rules((f, e) =>
         {
@@ -69,5 +68,5 @@ public class DataSeedHostingService : IHostedService
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-   
+
 }
