@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Companies.API.Data.Configurations;
+namespace Companies.Infractructure.Data.Configurations;
 
 public class CompanyConfiguration : IEntityTypeConfiguration<Company>
 {
     public void Configure(EntityTypeBuilder<Company> builder)
     {
+        //Microsoft.EntityFrameworkCore.Relational
         builder.ToTable("Company");
 
         builder.HasKey(c => c.Id);

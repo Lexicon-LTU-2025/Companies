@@ -1,6 +1,4 @@
-﻿
-using Bogus;
-using Companies.API.Data;
+﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
 
 namespace Companies.API.Services;

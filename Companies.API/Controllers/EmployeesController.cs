@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Companies.API.Data;
 using Companis.Shared;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

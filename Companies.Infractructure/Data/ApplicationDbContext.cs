@@ -1,7 +1,8 @@
-﻿using Companies.API.Data.Configurations;
+﻿using Companies.Infractructure.Data.Configurations;
+using Domain.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Companies.API.Data
+namespace Companies.Infractructure.Data
 {
     public class ApplicationDbContext : DbContext
     {

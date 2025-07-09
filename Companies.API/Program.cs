@@ -1,10 +1,5 @@
-
-using Companies.API.Middleware;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Companies.API.Data;
-using Companies.API.Services;
 using Companies.API.Extensions;
+using Companies.API.Services;
 
 namespace Companies.API
 {
@@ -17,7 +12,7 @@ namespace Companies.API
             builder.Services.ConfigureSql(builder.Configuration);
 
             builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
-                           // .AddXmlDataContractSerializerFormatters()
+                            // .AddXmlDataContractSerializerFormatters()
                             .AddNewtonsoftJson();
 
             builder.Services.AddOpenApi();

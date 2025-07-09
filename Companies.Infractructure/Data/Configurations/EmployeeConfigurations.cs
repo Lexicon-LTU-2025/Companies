@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Companies.API.Data.Configurations;
+namespace Companies.Infractructure.Data.Configurations;
 
 public class EmployeeConfigurations : IEntityTypeConfiguration<Employee>
 {

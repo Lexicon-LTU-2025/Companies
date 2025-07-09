@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Companis.Shared;
+using Domain.Models.Entities;
 
-namespace Companies.API.Data;
+namespace Companies.Infractructure.Data;
 
 public class MapperProfile : Profile
 {
