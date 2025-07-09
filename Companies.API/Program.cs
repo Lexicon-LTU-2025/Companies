@@ -26,6 +26,21 @@ namespace Companies.API
 
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+
+                options.AddPolicy("AllowAll", p =>
+                   p.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader());
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,12 +51,16 @@ namespace Companies.API
 
             app.UseHttpsRedirection();
 
+            app.UseCors(");
+
             app.UseAuthorization();
 
             // app.UseDemoMiddleware();
 
 
             app.MapControllers();
+
+
 
             app.Run();
         }

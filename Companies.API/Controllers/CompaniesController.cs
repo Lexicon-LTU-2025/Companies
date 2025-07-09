@@ -11,11 +11,13 @@ using Companis.Shared;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Cors;
 
 namespace Companies.API.Controllers
 {
     [Route("api/companies")]
     [ApiController]
+    [EnableCors("AllowAll")]
     public class CompaniesController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -81,7 +83,7 @@ namespace Companies.API.Controllers
             await context.SaveChangesAsync();
             
             return Ok(mapper.Map<CompanyDto>(existingCompany)); //Just for demo!
-            //return NoContent();
+            return NoContent();
         }
 
         [HttpPost]
