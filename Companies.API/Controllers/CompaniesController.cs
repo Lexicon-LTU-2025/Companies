@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Companis.Shared;
+using Domain.Contracts.Repositories;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,17 @@ namespace Companies.API.Controllers
     [EnableCors("AllowAll")]
     public class CompaniesController : ControllerBase
     {
+       // private readonly CompanyRepository repo;
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
+        private readonly ICompanyRepository companyRepository;
 
-        public CompaniesController(ApplicationDbContext context, IMapper mapper)
+        public CompaniesController(ApplicationDbContext context, IMapper mapper, ICompanyRepository companyRepository)
         {
+           // repo = new CompanyRepository(context);
             this.context = context;
             this.mapper = mapper;
+            this.companyRepository = companyRepository;
         }
 
         // GET: api/Companies
@@ -32,8 +37,8 @@ namespace Companies.API.Controllers
             //var demoDto1 = await context.Companies.ProjectTo<CompanyDto>(mapper.ConfigurationProvider).ToListAsync();
 
             ////Project 2
-            var dtos = includeEmployees ? mapper.Map<IEnumerable<CompanyDto>>(await context.Companies.Include(c => c.Employees).ToListAsync()) :
-                                          mapper.Map<IEnumerable<CompanyDto>>(await context.Companies.ToListAsync());
+            var dtos = includeEmployees ? mapper.Map<IEnumerable<CompanyDto>>(await companyRepository.GetCompaniesAsync(true)) :
+                                          mapper.Map<IEnumerable<CompanyDto>>(await companyRepository.GetCompaniesAsync());
 
             //Select manual mapping
             //var dtos = await context.Companies.Select(c => new CompanyDto
@@ -48,11 +53,13 @@ namespace Companies.API.Controllers
             return Ok(dtos);
         }
 
+       
+
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<CompanyDto>> GetCompany(Guid id)
         {
-            var dto = await mapper.ProjectTo<CompanyDto>(context.Companies.Where(c => c.Id == id))
-                                  .FirstOrDefaultAsync();
+            var company = await companyRepository.GetCompanyAsync(id);
+            var dto = mapper.Map<CompanyDto>(company);
 
             if (dto == null) return NotFound();
 
@@ -65,7 +72,7 @@ namespace Companies.API.Controllers
         {
             if (id != dto.Id) return BadRequest();
 
-            var existingCompany = await context.Companies.FirstOrDefaultAsync(c => c.Id == id);
+            var existingCompany = await companyRepository.GetCompanyAsync(id);
 
             if (existingCompany is null) return NotFound();
 
@@ -76,6 +83,8 @@ namespace Companies.API.Controllers
             return Ok(mapper.Map<CompanyDto>(existingCompany)); //Just for demo!
             return NoContent();
         }
+
+    
 
         [HttpPost]
         public async Task<ActionResult<CompanyDto>> PostCompany(CompanyCreateDto dto)
@@ -94,7 +103,7 @@ namespace Companies.API.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteCompany(Guid id)
         {
-            var company = await context.Companies.FindAsync(id);
+            var company = await companyRepository.GetCompanyAsync(id);
             if (company == null) return NotFound();
 
             context.Companies.Remove(company);
