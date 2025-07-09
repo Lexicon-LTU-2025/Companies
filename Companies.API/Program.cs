@@ -15,8 +15,9 @@ namespace Companies.API
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.ConfigureSql(builder.Configuration);
-            
-            builder.Services.AddControllers()
+
+            builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
+                           // .AddXmlDataContractSerializerFormatters()
                             .AddNewtonsoftJson();
 
             builder.Services.AddOpenApi();
