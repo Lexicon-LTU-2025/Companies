@@ -1,4 +1,5 @@
-﻿using Domain.Contracts.Repositories;
+﻿using AutoMapper;
+using Domain.Contracts.Repositories;
 using Service.Contracts;
 
 namespace Companies.Services;
@@ -11,8 +12,8 @@ public class ServiceManager : IServiceManager
     //..
     //..
 
-    public ServiceManager(IUnitOfWork uow)
+    public ServiceManager(IUnitOfWork uow, IMapper mapper)
     {
-        companyService = new Lazy<ICompanyService>(() => new CompanyService(uow));
+        companyService = new Lazy<ICompanyService>(() => new CompanyService(uow, mapper));
     }
 }

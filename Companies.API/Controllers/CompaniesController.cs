@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Companies.Services;
 using Companis.Shared;
 using Domain.Contracts.Repositories;
 using Microsoft.AspNetCore.Cors;
@@ -30,14 +31,9 @@ namespace Companies.API.Controllers
 
         // GET: api/Companies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
-        {
-            var dtos = await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees);
-            //var dtos = includeEmployees ? mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompaniesAsync(true)) :
-            //                              mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompaniesAsync());
-
-            return Ok(dtos);
-        }
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees) =>
+                 Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
+        
 
        
 
