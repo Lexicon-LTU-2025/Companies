@@ -18,7 +18,7 @@ namespace Companies.API
                             .AddNewtonsoftJson();
 
             builder.Services.AddOpenApi();
-            builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddHostedService<DataSeedHostingService>();
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             builder.Services.ConfigureCors();
