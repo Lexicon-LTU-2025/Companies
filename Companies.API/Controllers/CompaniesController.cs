@@ -16,26 +16,14 @@ namespace Companies.API.Controllers
     {
         private readonly IServiceManager serviceManager;
 
-        // private readonly CompanyRepository repo;
-        // private readonly ApplicationDbContext context;
-        //private readonly IMapper mapper;
-        //private readonly IUnitOfWork uow;
-
-        public CompaniesController(/*IMapper mapper, IUnitOfWork uow*/ IServiceManager serviceManager)
+        public CompaniesController(IServiceManager serviceManager)
         {
             this.serviceManager = serviceManager;
-            // repo = new CompanyRepository(context);
-            //this.mapper = mapper;
-            //this.uow = uow;
         }
 
-        // GET: api/Companies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees) =>
                  Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
-        
-
-       
 
         //[HttpGet("{id:guid}")]
         //public async Task<ActionResult<CompanyDto>> GetCompany(Guid id)
@@ -47,9 +35,6 @@ namespace Companies.API.Controllers
 
         //    return Ok(dto);
         //}
-
-
-
 
         //[HttpPut("{id:guid}")]
         //public async Task<IActionResult> PutCompany(Guid id, CompanyUpdateDto dto)
@@ -67,8 +52,6 @@ namespace Companies.API.Controllers
         //    //return Ok(mapper.Map<CompanyDto>(existingCompany)); //Just for demo!
         //    return NoContent();
         //}
-
-    
 
         //[HttpPost]
         //public async Task<ActionResult<CompanyDto>> PostCompany(CompanyCreateDto dto)
