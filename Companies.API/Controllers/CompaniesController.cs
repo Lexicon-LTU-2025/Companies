@@ -74,7 +74,7 @@ namespace Companies.API.Controllers
         {
             if (id != dto.Id) return BadRequest();
 
-            var existingCompany = await uow.CompanyRepository.GetCompanyAsync(id);
+            var existingCompany = await uow.CompanyRepository.GetCompanyAsync(id, trackChanges: true);
 
             if (existingCompany is null) return NotFound();
 

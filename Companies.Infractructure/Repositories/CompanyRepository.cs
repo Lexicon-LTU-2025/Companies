@@ -9,32 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Companies.Infractructure.Repositories;
-public class CompanyRepository : ICompanyRepository
+public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
 {
-    private readonly ApplicationDbContext context;
 
-    public CompanyRepository(ApplicationDbContext context)
+    public CompanyRepository(ApplicationDbContext context) : base(context) { }
+ 
+
+    public async Task<Company?> GetCompanyAsync(Guid id, bool trackChanges = false)
     {
-        this.context = context;
+        return await FindByCondition(c => c.Id == id, trackChanges).FirstOrDefaultAsync();
     }
 
-    public async Task<Company?> GetCompanyAsync(Guid id)
+    public async Task<List<Company>> GetCompaniesAsync(bool include = false, bool trackChanges = false)
     {
-        return await context.Companies.FirstOrDefaultAsync(c => c.Id == id);
+        return include ? await FindAll(trackChanges).Include(c => c.Employees).ToListAsync() :
+                         await FindAll(trackChanges).ToListAsync();
     }
-
-    public async Task<List<Company>> GetCompaniesAsync(bool include = false)
-    {
-        return include ? await context.Companies.Include(c => c.Employees).ToListAsync() :
-                         await context.Companies.ToListAsync();
-    }
-
-    public void Create(Company company) => context.Companies.Add(company);
-  
-
-    public void Update(Company company) => context.Companies.Update(company);
-    
-
-    public void Delete(Company company) => context.Companies.Remove(company);
-   
 }
