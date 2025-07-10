@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 namespace Companies.Infractructure.Repositories;
 public class RepositoryBase<T> : IRepositoryBase<T> where T : class //Do Entitybase
 {
-    protected ApplicationDbContext Context { get; }
+   // protected ApplicationDbContext Context { get; }
     protected DbSet<T> DbSet { get; }
 
     public RepositoryBase(ApplicationDbContext context)
     {
-        Context = context;
+       // Context = context;
         DbSet = context.Set<T>();
     }
 
