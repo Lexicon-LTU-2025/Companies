@@ -28,4 +28,13 @@ public class CompanyRepository : ICompanyRepository
         return include ? await context.Companies.Include(c => c.Employees).ToListAsync() :
                          await context.Companies.ToListAsync();
     }
+
+    public void Create(Company company) => context.Companies.Add(company);
+  
+
+    public void Update(Company company) => context.Companies.Update(company);
+    
+
+    public void Delete(Company company) => context.Companies.Remove(company);
+   
 }

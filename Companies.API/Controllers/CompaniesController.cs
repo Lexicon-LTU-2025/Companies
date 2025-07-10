@@ -13,7 +13,7 @@ namespace Companies.API.Controllers
     public class CompaniesController : ControllerBase
     {
        // private readonly CompanyRepository repo;
-        private readonly ApplicationDbContext context;
+       // private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
         private readonly ICompanyRepository companyRepository;
 
@@ -92,7 +92,7 @@ namespace Companies.API.Controllers
             //var company = new Company { Name = dto.Name, Address = dto.Address, Country = dto.Country };
             var company = mapper.Map<Company>(dto);
 
-            context.Companies.Add(company);
+            companyRepository.Create(company);
             await context.SaveChangesAsync();
 
             var createdDto = mapper.Map<CompanyDto>(company);
@@ -106,7 +106,7 @@ namespace Companies.API.Controllers
             var company = await companyRepository.GetCompanyAsync(id);
             if (company == null) return NotFound();
 
-            context.Companies.Remove(company);
+            companyRepository.Delete(company);
             await context.SaveChangesAsync();
 
             return NoContent();
