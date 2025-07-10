@@ -1,7 +1,9 @@
 using Companies.API.Extensions;
 using Companies.API.Services;
 using Companies.Infractructure.Repositories;
+using Companies.Services;
 using Domain.Contracts.Repositories;
+using Service.Contracts;
 
 namespace Companies.API
 {
@@ -19,6 +21,7 @@ namespace Companies.API
 
             builder.Services.AddOpenApi();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddHostedService<DataSeedHostingService>();
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             builder.Services.ConfigureCors();

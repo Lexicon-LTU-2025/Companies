@@ -1,5 +1,14 @@
-﻿namespace Companies.Services;
+﻿using Domain.Contracts.Repositories;
+using Service.Contracts;
 
-public class CompanyService
+namespace Companies.Services;
+
+public class CompanyService : ICompanyService
 {
+    private IUnitOfWork uow;
+
+    public CompanyService(IUnitOfWork uow)
+    {
+        this.uow = uow;
+    }
 }

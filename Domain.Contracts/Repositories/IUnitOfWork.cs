@@ -1,6 +1,4 @@
-﻿using Domain.Contracts.Repositories;
-
-namespace Companies.Infractructure.Repositories;
+﻿namespace Domain.Contracts.Repositories;
 public interface IUnitOfWork
 {
     ICompanyRepository CompanyRepository { get; }

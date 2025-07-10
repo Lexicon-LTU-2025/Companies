@@ -1,17 +1,18 @@
-﻿using Companies.Infractructure.Repositories;
+﻿using Domain.Contracts.Repositories;
+using Service.Contracts;
 
 namespace Companies.Services;
 
-public class ServiceManager
+public class ServiceManager : IServiceManager
 {
-    private Lazy<CompanyService> companyService;
-    public CompanyService CompanyService => companyService.Value;
+    private Lazy<ICompanyService> companyService;
+    public ICompanyService CompanyService => companyService.Value;
     //..
     //..
     //..
 
     public ServiceManager(IUnitOfWork uow)
     {
-        companyService = new Lazy<CompanyService>(() => new CompanyService());
+        companyService = new Lazy<ICompanyService>(() => new CompanyService(uow));
     }
 }
