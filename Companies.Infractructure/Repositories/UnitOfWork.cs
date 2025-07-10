@@ -9,7 +9,15 @@ using System.Threading.Tasks;
 namespace Companies.Infractructure.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
-    public ICompanyRepository CompanyRepository { get; }
+
+    private readonly Lazy<ICompanyRepository> companyRepository;
+    public ICompanyRepository CompanyRepository => companyRepository.Value;
+    //..
+    //..
+    //..
+    //..
+    //..
+    //..
     //..
     // more repos
 
@@ -17,7 +25,7 @@ public class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(ApplicationDbContext context)
     {
-        CompanyRepository = new CompanyRepository(context);
+        companyRepository = new Lazy<ICompanyRepository>(() => new CompanyRepository(context));
         this.context = context;
     }
 

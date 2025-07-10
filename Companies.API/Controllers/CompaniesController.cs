@@ -67,6 +67,8 @@ namespace Companies.API.Controllers
         }
 
 
+
+
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutCompany(Guid id, CompanyUpdateDto dto)
         {
