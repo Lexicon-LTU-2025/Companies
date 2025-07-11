@@ -1,13 +1,9 @@
-﻿using AutoMapper;
-using Companies.Services;
-using Companis.Shared;
-using Domain.Contracts.Repositories;
+﻿using Companis.Shared;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 
-namespace Companies.API.Controllers
+namespace Companies.Presentation.Controllers
 {
     [Route("api/companies")]
     [ApiController]
@@ -26,12 +22,9 @@ namespace Companies.API.Controllers
                  Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<CompanyDto>> GetCompany(Guid id)
-        {
-            var dto = await serviceManager.CompanyService.GetCompanyAsync(id);
-
-            return Ok(dto);
-        }
+        public async Task<ActionResult<CompanyDto>> GetCompany(Guid id) =>
+                Ok((CompanyDto?)await serviceManager.CompanyService.GetCompanyAsync(id));
+        
 
         //[HttpPut("{id:guid}")]
         //public async Task<IActionResult> PutCompany(Guid id, CompanyUpdateDto dto)

@@ -1,6 +1,7 @@
 using Companies.API.Extensions;
 using Companies.API.Services;
 using Companies.Infractructure.Repositories;
+using Companies.Presentation;
 using Companies.Services;
 using Domain.Contracts.Repositories;
 using Service.Contracts;
@@ -17,7 +18,8 @@ namespace Companies.API
 
             builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
                             // .AddXmlDataContractSerializerFormatters()
-                            .AddNewtonsoftJson();
+                            .AddNewtonsoftJson()
+                            .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
             builder.Services.AddOpenApi();
             builder.Services.AddRepositories();

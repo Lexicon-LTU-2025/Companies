@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using Companis.Shared;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using Companis.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 
-namespace Companies.API.Controllers
+namespace Companies.Presentation.Controllers
 {
     [Route("api/companies/{companyId:guid}/employees")]
     [ApiController]
@@ -24,9 +21,6 @@ namespace Companies.API.Controllers
         {
 
             var employeeDtos = await serviceManager.EmployeeService.GetEmployeesAsync(companyId);
-
-
-           
 
             return Ok(employeeDtos);
         }
