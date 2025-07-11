@@ -14,22 +14,17 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IEmployeeRepository> employeeRepository;
     public ICompanyRepository CompanyRepository => companyRepository.Value;
     public IEmployeeRepository EmployeeRepository => employeeRepository.Value;
-    //..
-    //..
-    //..
-    //..
-    //..
-    //..
-    //..
-    // more repos
 
     private readonly ApplicationDbContext context;
 
-    public UnitOfWork(ApplicationDbContext context)
+    public UnitOfWork(
+        ApplicationDbContext context,
+        Lazy<ICompanyRepository> companyRepository,
+        Lazy<IEmployeeRepository> employeeRepository)
     {
-        companyRepository = new Lazy<ICompanyRepository>(() => new CompanyRepository(context));
-        employeeRepository = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(context));
-        this.context = context;
+        this.companyRepository =  companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
+        this.employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(UnitOfWork.employeeRepository));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public async Task CompleteAsync() => await context.SaveChangesAsync();

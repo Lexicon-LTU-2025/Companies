@@ -12,8 +12,8 @@ public class ServiceManager : IServiceManager
     //..
     //..
 
-    public ServiceManager(IUnitOfWork uow, IMapper mapper)
+    public ServiceManager(Lazy<ICompanyService> companyService)
     {
-        companyService = new Lazy<ICompanyService>(() => new CompanyService(uow, mapper));
+        this.companyService = companyService;
     }
 }
