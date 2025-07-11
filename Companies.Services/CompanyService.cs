@@ -20,4 +20,13 @@ public class CompanyService : ICompanyService
     {
         return mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompaniesAsync(includeEmployees, trackChanges));
     }
+
+    public async Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges = false)
+    {
+        var company = await uow.CompanyRepository.GetCompanyAsync(id, trackChanges);
+
+        if (company is null) return null!;
+
+        return mapper.Map<CompanyDto>(company);
+    }
 }

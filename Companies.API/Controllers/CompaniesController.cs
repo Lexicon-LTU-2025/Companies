@@ -25,16 +25,13 @@ namespace Companies.API.Controllers
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees) =>
                  Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
 
-        //[HttpGet("{id:guid}")]
-        //public async Task<ActionResult<CompanyDto>> GetCompany(Guid id)
-        //{
-        //    var company = await uow.CompanyRepository.GetCompanyAsync(id);
-        //    var dto = mapper.Map<CompanyDto>(company);
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<CompanyDto>> GetCompany(Guid id)
+        {
+            var dto = await serviceManager.CompanyService.GetCompanyAsync(id);
 
-        //    if (dto == null) return NotFound();
-
-        //    return Ok(dto);
-        //}
+            return Ok(dto);
+        }
 
         //[HttpPut("{id:guid}")]
         //public async Task<IActionResult> PutCompany(Guid id, CompanyUpdateDto dto)
