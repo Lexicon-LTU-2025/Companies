@@ -3,6 +3,7 @@ using Companis.Shared;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Service.Contracts;
 
 namespace Companies.API.Controllers
 {
@@ -10,24 +11,22 @@ namespace Companies.API.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly ApplicationDbContext context;
-        private readonly IMapper mapper;
+        private readonly IServiceManager serviceManager;
 
-        public EmployeesController(ApplicationDbContext context, IMapper mapper)
+        public EmployeesController(IServiceManager serviceManager)
         {
-            this.context = context;
-            this.mapper = mapper;
+            this.serviceManager = serviceManager;
         }
 
         // GET: api/Employees
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployee(Guid companyId)
         {
-            var companyExists = await context.Companies.AnyAsync(c => c.Id.Equals(companyId));
-            if (!companyExists) return NotFound();
 
-            var employees = await context.Employees.Where(e => e.CompanyId.Equals(companyId)).ToListAsync();
-            var employeeDtos = mapper.Map<IEnumerable<EmployeeDto>>(employees);
+            var employeeDtos = await serviceManager.EmployeeService.GetEmployeesAsync(companyId);
+
+
+           
 
             return Ok(employeeDtos);
         }
@@ -77,36 +76,36 @@ namespace Companies.API.Controllers
         //    return NoContent();
         //}
 
-        [HttpPatch("{id:guid}")]
-        public async Task<IActionResult> PatchEmployee(Guid companyId, Guid id, JsonPatchDocument<EmployeeUpdateDto> patchDocument)
-        {
-            if (patchDocument is null) return BadRequest(); //Use Problem();
+        //[HttpPatch("{id:guid}")]
+        //public async Task<IActionResult> PatchEmployee(Guid companyId, Guid id, JsonPatchDocument<EmployeeUpdateDto> patchDocument)
+        //{
+        //    if (patchDocument is null) return BadRequest(); //Use Problem();
 
-            var companyExists = await context.Companies
-                                          .AnyAsync(c => c.Id == companyId);
+        //    var companyExists = await context.Companies
+        //                                  .AnyAsync(c => c.Id == companyId);
 
-            if (!companyExists) return Problem(
-                 statusCode: StatusCodes.Status404NotFound,
-                 title: "Company not found",
-                 detail: $"Company with id:{companyId} could not be located"
-                );
+        //    if (!companyExists) return Problem(
+        //         statusCode: StatusCodes.Status404NotFound,
+        //         title: "Company not found",
+        //         detail: $"Company with id:{companyId} could not be located"
+        //        );
 
-            var employeeToPatch = await context.Employees.FirstOrDefaultAsync(e => e.Id == id && e.CompanyId == companyId);
+        //    var employeeToPatch = await context.Employees.FirstOrDefaultAsync(e => e.Id == id && e.CompanyId == companyId);
 
-            if (employeeToPatch is null) return NotFound(); //Use Problem();
+        //    if (employeeToPatch is null) return NotFound(); //Use Problem();
 
-            var employeeToPatchDto = mapper.Map<EmployeeUpdateDto>(employeeToPatch);
+        //    var employeeToPatchDto = mapper.Map<EmployeeUpdateDto>(employeeToPatch);
 
-            patchDocument.ApplyTo(employeeToPatchDto, ModelState);
-            TryValidateModel(employeeToPatchDto);
+        //    patchDocument.ApplyTo(employeeToPatchDto, ModelState);
+        //    TryValidateModel(employeeToPatchDto);
 
-            if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
+        //    if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
 
-            mapper.Map(employeeToPatchDto, employeeToPatch);
-            await context.SaveChangesAsync();
+        //    mapper.Map(employeeToPatchDto, employeeToPatch);
+        //    await context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         //// POST: api/Employees
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -119,27 +118,27 @@ namespace Companies.API.Controllers
         //    return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
         //}
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteEmployee(Guid companyId, Guid id)
-        {
-            var companyExists = await context.Companies
-                                          .AnyAsync(c => c.Id == companyId);
+        //[HttpDelete("{id:guid}")]
+        //public async Task<IActionResult> DeleteEmployee(Guid companyId, Guid id)
+        //{
+        //    var companyExists = await context.Companies
+        //                                  .AnyAsync(c => c.Id == companyId);
 
-            if (!companyExists) return Problem(
-                 statusCode: StatusCodes.Status404NotFound,
-                 title: "Company not found",
-                 detail: $"Company with id:{companyId} could not be located"
-                );
+        //    if (!companyExists) return Problem(
+        //         statusCode: StatusCodes.Status404NotFound,
+        //         title: "Company not found",
+        //         detail: $"Company with id:{companyId} could not be located"
+        //        );
 
-            var employee = await context.Employees.FirstOrDefaultAsync(e => e.Id == id && e.CompanyId == companyId);
+        //    var employee = await context.Employees.FirstOrDefaultAsync(e => e.Id == id && e.CompanyId == companyId);
 
-            if (employee == null) return NotFound();
+        //    if (employee == null) return NotFound();
 
-            context.Employees.Remove(employee);
-            await context.SaveChangesAsync();
+        //    context.Employees.Remove(employee);
+        //    await context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         //private bool EmployeeExists(Guid id)
         //{
