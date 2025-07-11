@@ -11,7 +11,9 @@ public class UnitOfWork : IUnitOfWork
 {
 
     private readonly Lazy<ICompanyRepository> companyRepository;
+    private readonly Lazy<IEmployeeRepository> employeeRepository;
     public ICompanyRepository CompanyRepository => companyRepository.Value;
+    public IEmployeeRepository EmployeeRepository => employeeRepository.Value;
     //..
     //..
     //..
@@ -26,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(ApplicationDbContext context)
     {
         companyRepository = new Lazy<ICompanyRepository>(() => new CompanyRepository(context));
+        employeeRepository = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(context));
         this.context = context;
     }
 
