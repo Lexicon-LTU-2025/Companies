@@ -25,7 +25,7 @@ public class CompanyService : ICompanyService
     {
         var company = await uow.CompanyRepository.GetCompanyAsync(id, trackChanges);
 
-        if (company is null) return null!;
+        if (company is null) throw new Exception("Aj då");
 
         return mapper.Map<CompanyDto>(company);
     }
