@@ -5,7 +5,9 @@ using Companies.Presentation;
 using Companies.Services;
 using Domain.Contracts.Repositories;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Service.Contracts;
 
 namespace Companies.API
@@ -28,6 +30,18 @@ namespace Companies.API
             builder.Services.AddServiceLayer();
 
             builder.Services.AddAuthentication();
+            builder.Services.AddIdentityCore<Employee>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 3;
+            })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
            
             builder.Services.AddHostedService<DataSeedHostingService>();
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
