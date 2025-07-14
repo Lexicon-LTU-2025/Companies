@@ -2,7 +2,7 @@
 
 namespace Domain.Models.Entities;
 
-public class Employee : IdentityUser
+public class ApplicationUser : IdentityUser
 {
    // public Guid Id { get; set; }
     public string Name { get; set; } = null!;

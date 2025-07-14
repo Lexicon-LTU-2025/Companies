@@ -51,11 +51,11 @@ public class DataSeedHostingService : IHostedService
         return faker.Generate(numberOfCompanies);
     }
 
-    private static List<Employee> GenerateEmployees(int numberOfEmplyees)
+    private static List<ApplicationUser> GenerateEmployees(int numberOfEmplyees)
     {
         string[] positions = ["Developer", "Tester", "Manager"];
 
-        var faker = new Faker<Employee>("sv").Rules((f, e) =>
+        var faker = new Faker<ApplicationUser>("sv").Rules((f, e) =>
         {
             e.Name = f.Person.FullName;
             e.Age = f.Random.Int(min: 18, max: 70);

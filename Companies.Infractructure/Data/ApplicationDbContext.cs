@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Companies.Infractructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<Employee, IdentityRole, string>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public DbSet<Company> Companies => Set<Company>();
       // public DbSet<Employee> Users { get; set; } = default!;

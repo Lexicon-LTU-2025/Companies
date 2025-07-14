@@ -17,8 +17,8 @@ public class MapperProfile : Profile
         CreateMap<CompanyUpdateDto, Company>();
 
 
-        CreateMap<Employee, EmployeeDto>();
-        CreateMap<EmployeeCreateDto, Employee>();
-        CreateMap<EmployeeUpdateDto, Employee>().ReverseMap();
+        CreateMap<ApplicationUser, EmployeeDto>();
+        CreateMap<EmployeeCreateDto, ApplicationUser>();
+        CreateMap<EmployeeUpdateDto, ApplicationUser>().ReverseMap();
     }
 }
