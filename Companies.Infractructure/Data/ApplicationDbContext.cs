@@ -17,11 +17,11 @@ namespace Companies.Infractructure.Data
             //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
-            modelBuilder.ApplyConfiguration(new EmployeeConfigurations());
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+        //    modelBuilder.ApplyConfiguration(new EmployeeConfigurations());
+        //}
 
     }
 }

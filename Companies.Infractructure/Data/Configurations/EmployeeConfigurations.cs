@@ -10,7 +10,7 @@ public class EmployeeConfigurations : IEntityTypeConfiguration<Employee>
     {
         builder.ToTable("Employee");
 
-        builder.HasKey(e => e.Id);
+       // builder.HasKey(e => e.Id);
 
         builder.Property(e => e.Name)
             .IsRequired()
