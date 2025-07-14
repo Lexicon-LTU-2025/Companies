@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Companies.Infractructure.Repositories;
-public class RepositoryBase<T> : IRepositoryBase<T> where T : class //Do Entitybase
+public abstract class RepositoryBase<T> : IRepositoryBase<T>, IInternalRepositoryBase<T> where T : class //Do Entitybase
 {
    // protected ApplicationDbContext Context { get; }
     protected DbSet<T> DbSet { get; }
