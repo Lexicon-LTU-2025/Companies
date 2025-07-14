@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Companis.Shared;
 using Domain.Contracts.Repositories;
+using Domain.Models.Exceptions;
 using Service.Contracts;
 
 namespace Companies.Services;
@@ -25,7 +26,7 @@ public class CompanyService : ICompanyService
     {
         var company = await uow.CompanyRepository.GetCompanyAsync(id, trackChanges);
 
-        if (company is null) throw new Exception("Aj då");
+        if (company is null) throw new CompanyNotFoundException(id);
 
         return mapper.Map<CompanyDto>(company);
     }
