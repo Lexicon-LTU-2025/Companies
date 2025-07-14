@@ -19,7 +19,6 @@ namespace Companies.Presentation.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployee(Guid companyId)
         {
-
             var employeeDtos = await serviceManager.EmployeeService.GetEmployeesAsync(companyId);
 
             return Ok(employeeDtos);

@@ -26,6 +26,8 @@ namespace Companies.API
             builder.Services.AddOpenApi();
             builder.Services.AddRepositories();
             builder.Services.AddServiceLayer();
+
+            builder.Services.AddAuthentication();
            
             builder.Services.AddHostedService<DataSeedHostingService>();
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
@@ -48,6 +50,7 @@ namespace Companies.API
 
             app.UseCors();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // app.UseDemoMiddleware();
