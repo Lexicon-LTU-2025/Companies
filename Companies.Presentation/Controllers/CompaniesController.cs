@@ -23,7 +23,7 @@ namespace Companies.Presentation.Controllers
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<CompanyDto>> GetCompany(Guid id) =>
-                Ok((CompanyDto?)await serviceManager.CompanyService.GetCompanyAsync(id));
+                Ok(await serviceManager.CompanyService.GetCompanyAsync(id));
         
 
         //[HttpPut("{id:guid}")]
