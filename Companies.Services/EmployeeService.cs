@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Companis.Shared;
+using Companis.Shared.Responses;
 using Domain.Contracts.Repositories;
 using Service.Contracts;
 using System;
@@ -19,12 +20,14 @@ public class EmployeeService : IEmployeeService
         this.uow = uow;
         this.mapper = mapper;
     }
-    public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges = false)
+    public async Task<ApiBaseResponse> GetEmployeesAsync(Guid companyId, bool trackChanges = false)
     {
         var companyExists = await uow.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
-        if (companyExists is  null) return null!;
+        if (companyExists is null) return new CompanyNotFoundResponse(companyId);
 
         var employees = await uow.EmployeeRepository.GetEmployeesAsync(companyId, trackChanges);
-        return mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        var employeeDtos = mapper.Map<IEnumerable<EmployeeDto>>(employees);
+
+        return new OkResponse<IEnumerable<EmployeeDto>>(employeeDtos);
     }
 }

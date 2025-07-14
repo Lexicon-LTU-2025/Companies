@@ -1,4 +1,5 @@
 ﻿using Companis.Shared;
+using Companis.Shared.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 namespace Service.Contracts;
 public interface IEmployeeService
 {
-    Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges = false);
+    Task<ApiBaseResponse> GetEmployeesAsync(Guid companyId, bool trackChanges = false);
 }

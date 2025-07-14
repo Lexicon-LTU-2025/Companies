@@ -1,4 +1,5 @@
 ﻿using Companis.Shared;
+using Companis.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 
@@ -6,7 +7,7 @@ namespace Companies.Presentation.Controllers
 {
     [Route("api/companies/{companyId:guid}/employees")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class EmployeesController : ApiControllerBase
     {
         private readonly IServiceManager serviceManager;
 
@@ -19,10 +20,11 @@ namespace Companies.Presentation.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployee(Guid companyId)
         {
+            ApiBaseResponse response = await serviceManager.EmployeeService.GetEmployeesAsync(companyId);
 
-            var employeeDtos = await serviceManager.EmployeeService.GetEmployeesAsync(companyId);
-
-            return Ok(employeeDtos);
+            return response.Success ?
+                Ok(response.GetOkResult<IEnumerable<EmployeeDto>>()) :
+                ProcessError(response);
         }
 
         //// GET: api/Employees/5
