@@ -30,8 +30,8 @@ public class DataSeedHostingService : IHostedService
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         if (await context.Companies.AnyAsync(cancellationToken)) return;
 
-        userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
         //Null checks :)
         ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
