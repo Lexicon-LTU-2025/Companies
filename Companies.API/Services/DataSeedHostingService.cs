@@ -5,18 +5,24 @@ using System.Threading.Tasks;
 
 namespace Companies.API.Services;
 
+//Add in secret.json
+//{
+//   "password" :  "password"
+//}
 public class DataSeedHostingService : IHostedService
 {
     private readonly IServiceProvider serviceProvider;
+    private readonly IConfiguration configuration;
     private readonly ILogger<DataSeedHostingService> logger;
     private UserManager<ApplicationUser> userManager = null!;
     private RoleManager<IdentityRole> roleManager = null!;
     private const string EmployeeRole = "Employee";
     private const string AdminRole = "Admin";
 
-    public DataSeedHostingService(IServiceProvider serviceProvider, ILogger<DataSeedHostingService> logger)
+    public DataSeedHostingService(IServiceProvider serviceProvider, IConfiguration configuration, ILogger<DataSeedHostingService> logger)
     {
         this.serviceProvider = serviceProvider;
+        this.configuration = configuration;
         this.logger = logger;
     }
 
@@ -33,7 +39,7 @@ public class DataSeedHostingService : IHostedService
         userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        //Null checks :)
+       
         ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
         ArgumentNullException.ThrowIfNull(userManager, nameof(userManager));
 
@@ -80,6 +86,8 @@ public class DataSeedHostingService : IHostedService
     private async Task GenerateEmployees(int numberOfEmplyees, List<Company> companies)
     {
         string[] positions = ["Developer", "Tester", "Manager"];
+        var password = configuration["password"];
+        ArgumentNullException.ThrowIfNull(password, nameof(password));
 
         var faker = new Faker<ApplicationUser>("sv").Rules((f, e) =>
         {
@@ -95,7 +103,7 @@ public class DataSeedHostingService : IHostedService
 
         foreach (var user in employees)
         {
-            var result = await userManager.CreateAsync(user, "password");
+            var result = await userManager.CreateAsync(user, password);
             if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
 
             if (user.Position == "Manager") await userManager.AddToRoleAsync(user, AdminRole);
