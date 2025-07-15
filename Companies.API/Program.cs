@@ -4,11 +4,14 @@ using Companies.Infractructure.Repositories;
 using Companies.Presentation;
 using Companies.Services;
 using Domain.Contracts.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Service.Contracts;
+using System.Text;
 
 namespace Companies.API
 {
@@ -29,7 +32,33 @@ namespace Companies.API
             builder.Services.AddRepositories();
             builder.Services.AddServiceLayer();
 
-            builder.Services.AddAuthentication();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+                ArgumentNullException.ThrowIfNull(jwtSettings, nameof(jwtSettings));
+
+                var secretkey = builder.Configuration["secretkey"];
+                ArgumentNullException.ThrowIfNull(secretkey, nameof(secretkey));
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey))
+                };
+            });
+
+
+
             builder.Services.AddIdentityCore<ApplicationUser>(opt =>
             {
                 opt.Password.RequireDigit = false;
