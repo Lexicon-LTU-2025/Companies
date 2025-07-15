@@ -28,4 +28,13 @@ public class AuthController : ControllerBase
         IdentityResult result = await serviceManager.AuthService.RegisterUserAsync(userRegistrationDto);
         return result.Succeeded ? StatusCode(StatusCodes.Status201Created) : BadRequest(result.Errors);
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Authenticate(UserAuthDto user)
+    {
+        if (!await serviceManager.AuthService.ValidateUserAsync(user))
+            return Unauthorized();
+
+        return Ok(new { Token = await serviceManager.AuthService.CreateTokenAsync() });
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using Companis.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
@@ -8,6 +9,7 @@ namespace Companies.Presentation.Controllers
     [Route("api/companies")]
     [ApiController]
     [EnableCors("AllowAll")]
+    //[Authorize]
     public class CompaniesController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
@@ -18,6 +20,8 @@ namespace Companies.Presentation.Controllers
         }
 
         [HttpGet]
+      //  [AllowAnonymous]
+        [Authorize(Roles = "Admin")] 
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees) =>
                  Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
 
