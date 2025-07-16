@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Service.Contracts;
 public interface IAuthService
 {
-    Task<string> CreateTokenAsync();
+    Task<TokenDto> CreateTokenAsync(bool addTime);
     Task<IdentityResult> RegisterUserAsync(UserRegistrationDto userRegistrationDto);
     Task<bool> ValidateUserAsync(UserAuthDto user);
 }

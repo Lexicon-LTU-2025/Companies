@@ -37,6 +37,7 @@ public class AuthController : ControllerBase
         if (!await serviceManager.AuthService.ValidateUserAsync(user))
             return Unauthorized();
 
-        return Ok(new { Token = await serviceManager.AuthService.CreateTokenAsync() });
+        var tokenDto = await serviceManager.AuthService.CreateTokenAsync(addTime: true);
+        return Ok(tokenDto);
     }
 }
