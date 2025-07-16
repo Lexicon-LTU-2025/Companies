@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Service.Contracts;
+using System.Security.Claims;
 using System.Text;
 
 namespace Companies.API
@@ -30,11 +31,11 @@ namespace Companies.API
             {
                 opt.ReturnHttpNotAcceptable = true;
 
-                var policy = new AuthorizationPolicyBuilder()
-                                   .RequireAuthenticatedUser()
-                                   .Build();
+                //var policy = new AuthorizationPolicyBuilder()
+                //                   .RequireAuthenticatedUser()
+                //                   .Build();
 
-                opt.Filters.Add(new AuthorizeFilter(policy));
+                //opt.Filters.Add(new AuthorizeFilter(policy));
 
             })
                             // .AddXmlDataContractSerializerFormatters()
@@ -85,6 +86,22 @@ namespace Companies.API
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanWrite", policy =>
+                {
+                    policy.RequireRole("Admin")
+                          .RequireAuthenticatedUser()
+                          .RequireClaim(ClaimTypes.NameIdentifier)
+                          .RequireClaim(ClaimTypes.Role);
+                });
+
+                options.AddPolicy("EmpPol", policy =>
+                {
+                    policy.RequireRole("Employee");
+                });
+            });
 
 
             builder.Services.AddHostedService<DataSeedHostingService>();

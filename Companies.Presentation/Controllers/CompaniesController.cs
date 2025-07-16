@@ -26,6 +26,7 @@ namespace Companies.Presentation.Controllers
                  Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
 
         [HttpGet("{id:guid}")]
+        [Authorize(Policy = "CanWrite")] 
         public async Task<ActionResult<CompanyDto>> GetCompany(Guid id) =>
                 Ok(await serviceManager.CompanyService.GetCompanyAsync(id));
         
