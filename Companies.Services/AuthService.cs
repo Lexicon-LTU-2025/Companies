@@ -69,7 +69,8 @@ public class AuthService : IAuthService
         var claims = new List<Claim>()
         {
             new Claim(ClaimTypes.Name, user.UserName!),
-            new Claim("Age", user.Age.ToString())
+            new Claim("Age", user.Age.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             //Add more if needed
         };
 
