@@ -1,4 +1,5 @@
 ﻿using Companis.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> Authenticate(UserAuthDto user)
     {
         if (!await serviceManager.AuthService.ValidateUserAsync(user))

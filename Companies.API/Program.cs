@@ -5,9 +5,12 @@ using Companies.Presentation;
 using Companies.Services;
 using Domain.Contracts.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Service.Contracts;
@@ -23,7 +26,17 @@ namespace Companies.API
 
             builder.Services.ConfigureSql(builder.Configuration);
 
-            builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
+            builder.Services.AddControllers(opt =>
+            {
+                opt.ReturnHttpNotAcceptable = true;
+
+                var policy = new AuthorizationPolicyBuilder()
+                                   .RequireAuthenticatedUser()
+                                   .Build();
+
+                opt.Filters.Add(new AuthorizeFilter(policy));
+
+            })
                             // .AddXmlDataContractSerializerFormatters()
                             .AddNewtonsoftJson()
                             .AddApplicationPart(typeof(AssemblyReference).Assembly);
@@ -73,7 +86,7 @@ namespace Companies.API
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-           
+
             builder.Services.AddHostedService<DataSeedHostingService>();
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             builder.Services.ConfigureCors();
