@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Companis.Shared;
 using Domain.Contracts.Repositories;
+using Domain.Models.Configurations;
 using Domain.Models.Entities;
 using Domain.Models.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Service.Contracts;
 using System;
@@ -25,6 +27,7 @@ public class AuthService : IAuthService
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly ICompanyRepository companyRepository;
     private readonly IConfiguration configuration;
+    private readonly JwtSettings jwtSettings;
     private ApplicationUser? user;
 
     public AuthService(
@@ -32,7 +35,8 @@ public class AuthService : IAuthService
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         ICompanyRepository companyRepository,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IOptions<JwtSettings> jwtSettings
         )
     {
         this.mapper = mapper;
@@ -40,6 +44,7 @@ public class AuthService : IAuthService
         this.roleManager = roleManager;
         this.companyRepository = companyRepository;
         this.configuration = configuration;
+        this.jwtSettings = jwtSettings.Value;
     }
 
     public async Task<TokenDto> CreateTokenAsync(bool addTime)
@@ -71,13 +76,11 @@ public class AuthService : IAuthService
 
     private JwtSecurityToken GenerateToken(SigningCredentials signing, IEnumerable<Claim> claims)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
-
         var token = new JwtSecurityToken(
-                                    issuer: jwtSettings["Issuer"],
-                                    audience: jwtSettings["Audience"],
+                                    issuer: jwtSettings.Issuer,
+                                    audience: jwtSettings.Audience,
                                     claims: claims,
-                                    expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["Expires"])),
+                                    expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.Expires)),
                                     signingCredentials: signing);
 
         return token;
@@ -108,10 +111,7 @@ public class AuthService : IAuthService
 
     private SigningCredentials GetSigningCredentials()
     {
-        var secretKey = configuration["secretkey"];
-        ArgumentNullException.ThrowIfNull(secretKey, nameof(secretKey));
-
-        var key = Encoding.UTF8.GetBytes(secretKey);
+        var key = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
         var secret = new SymmetricSecurityKey(key);
 
         return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
@@ -173,19 +173,15 @@ public class AuthService : IAuthService
 
     private ClaimsPrincipal GetPrincipalFromExpiredToken(string accessToken)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
-        var secretKey = configuration["secretkey"];
-        ArgumentNullException.ThrowIfNull(secretKey, nameof(secretKey));
-
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

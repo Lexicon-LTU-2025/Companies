@@ -1,4 +1,5 @@
 ﻿using Companies.Infractructure.Repositories;
+using Companies.Presentation;
 using Companies.Services;
 using Domain.Contracts.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,24 @@ public static class ServiceExtensions
                .AllowAnyMethod()
                .AllowAnyHeader());
         });
+    }
+
+    public static void ConfigureControllers(this IServiceCollection services)
+    {
+        services.AddControllers(opt =>
+        {
+            opt.ReturnHttpNotAcceptable = true;
+
+            //var policy = new AuthorizationPolicyBuilder()
+            //                   .RequireAuthenticatedUser()
+            //                   .Build();
+
+            //opt.Filters.Add(new AuthorizeFilter(policy));
+
+        })
+                // .AddXmlDataContractSerializerFormatters()
+                .AddNewtonsoftJson()
+                .AddApplicationPart(typeof(AssemblyReference).Assembly);
     }
 
     public static void ConfigureSql(this IServiceCollection services, IConfiguration configuration)
