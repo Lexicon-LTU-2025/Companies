@@ -33,6 +33,14 @@ public static class ExceptionMiddlewareExtetensions
                                     detail: companyNotFoundException.Message,
                                     instance: context.Request.Path);
                             break;
+                        case TokenValidationException tokenValidationException:
+                            statusCode = tokenValidationException.StatusCode;
+                            problemDetails = problemDetailsFactory.CreateProblemDetails(
+                                    context,
+                                    statusCode,
+                                    detail: tokenValidationException.Message,
+                                    instance: context.Request.Path);
+                            break;
                         default:
                             statusCode = StatusCodes.Status500InternalServerError;
                             problemDetails = problemDetailsFactory.CreateProblemDetails(
