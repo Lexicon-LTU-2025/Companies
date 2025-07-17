@@ -1,9 +1,13 @@
-﻿using Bogus;
+﻿using AutoMapper;
+using Bogus;
+using Companies.Infractructure.Data;
 using Companies.Presentation.TestDemosOnly;
+using Companis.Shared;
 using Domain.Contracts.Repositories;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -20,7 +24,14 @@ public class RepositoryControllerTests
     public RepositoryControllerTests()
     {
         mockRepo = new Mock<ICompanyRepository>();
-        sut = new RepositoryController(mockRepo.Object);
+
+        var configExpression = new MapperConfigurationExpression();
+        configExpression.AddProfile<MapperProfile>();
+
+        var config = new MapperConfiguration(configExpression, new LoggerFactory());
+        IMapper mapper = config.CreateMapper();
+
+        sut = new RepositoryController(mockRepo.Object, mapper);
     }
 
     [Fact]
@@ -36,7 +47,7 @@ public class RepositoryControllerTests
 
         var resultType = Assert.IsType<OkObjectResult>(result.Result);
         Assert.Equal(StatusCodes.Status200OK, resultType.StatusCode);
-        var actualCompanies =  Assert.IsType<List<Company>>(resultType.Value);
+        var actualCompanies =  Assert.IsType<List<CompanyDto>>(resultType.Value);
         Assert.Equal(actualCompanies?.Count, expectedCount);
 
 
