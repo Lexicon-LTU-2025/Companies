@@ -36,10 +36,10 @@ public class SimpleControllerTests
 
         //Act
         var result = await sut.GetCompany();
-        var resultType = result.Result as UnauthorizedResult;
+        //var resultType = result.Result as UnauthorizedResult;
 
         //Assert
-        Assert.IsType<UnauthorizedResult>(resultType);
+        var resultType = Assert.IsType<UnauthorizedResult>(result.Result);
         Assert.Equal(StatusCodes.Status401Unauthorized, resultType.StatusCode);
     }
 
@@ -52,10 +52,10 @@ public class SimpleControllerTests
 
         //Act
         var result = await sut.GetCompany();
-        var resultType = result.Result as UnauthorizedResult;
+        //var resultType = result.Result as UnauthorizedResult;
 
         //Assert
-        Assert.IsType<UnauthorizedResult>(resultType);
+        var resultType = Assert.IsType<UnauthorizedResult>(result.Result);
         Assert.Equal(StatusCodes.Status401Unauthorized, resultType.StatusCode);
     }
 
