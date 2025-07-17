@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Companis.Shared;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ public class SimpleController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCompany()
+    public async Task<ActionResult<CompanyDto>> GetCompany()
     {
         if (User?.Identity?.IsAuthenticated ?? false)
         {
