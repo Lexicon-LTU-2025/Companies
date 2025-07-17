@@ -1,4 +1,5 @@
 ﻿using Companies.Presentation.TestDemosOnly;
+using Controller.Tests.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -24,16 +25,8 @@ public class SimpleControllerTests
     public async Task GetCompany_IsNotAuthenticated_ShouldReturn_401()
     {
         //Arrange
-        var mockHttpContext = new Mock<HttpContext>();
-        mockHttpContext.SetupGet(x => x.User.Identity.IsAuthenticated).Returns(false);
-
-        var controllerContext = new ControllerContext()
-        {
-            HttpContext = mockHttpContext.Object
-        };
-
         var sut = new SimpleController();
-        sut.ControllerContext = controllerContext;
+        sut.SetUserIsAuthenticated(false);
 
         //Act
         var result = await sut.GetCompany();
@@ -48,17 +41,9 @@ public class SimpleControllerTests
     public async Task GetCompany_IsNotAuthenticated_ShouldReturn_401_Nr2()
     {
         //Arrange
-        var claimsPrincipalMock = new Mock<ClaimsPrincipal>();
-        claimsPrincipalMock.SetupGet(x => x.Identity.IsAuthenticated).Returns(false);
-
         var sut = new SimpleController();
-        sut.ControllerContext = new ControllerContext()
-        {
-            HttpContext = new DefaultHttpContext
-            {
-                User = claimsPrincipalMock.Object,
-            }
-        };
+        sut.SetUserIsAuthenticated(false);
+        
 
         //Act
         var result = await sut.GetCompany();
@@ -74,19 +59,8 @@ public class SimpleControllerTests
     public async Task GetCompany_IfAuthenticated_ShouldReturn_200Ok()
     {
         //Arrange
-        //var mockHttpContext = new Mock<HttpContext>();
-        //mockHttpContext.SetupGet(x => x.User.Identity.IsAuthenticated).Returns(false);
-
-        var httpContext = Mock.Of<HttpContext>(x => x.User.Identity.IsAuthenticated == true);
-
-
-        var controllerContext = new ControllerContext()
-        {
-            HttpContext = httpContext
-        };
-
         var sut = new SimpleController();
-        sut.ControllerContext = controllerContext;
+        sut.SetUserIsAuthenticated(true);
 
         //Act
         var result = await sut.GetCompany();
