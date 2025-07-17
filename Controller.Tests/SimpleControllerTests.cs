@@ -9,6 +9,8 @@ namespace Controller.Tests;
 
 public class SimpleControllerTests
 {
+    private SimpleController sut;
+
     //[Fact]
     //public async Task GetCompany_ShouldReturn_StatusCode200Ok()
     //{
@@ -21,11 +23,15 @@ public class SimpleControllerTests
     //    Assert.Equal(StatusCodes.Status200OK, resultType.StatusCode);
     //}
 
+    public SimpleControllerTests()
+    {
+        sut = new SimpleController();
+    }
+
     [Fact]
     public async Task GetCompany_IsNotAuthenticated_ShouldReturn_401()
     {
         //Arrange
-        var sut = new SimpleController();
         sut.SetUserIsAuthenticated(false);
 
         //Act
@@ -41,7 +47,6 @@ public class SimpleControllerTests
     public async Task GetCompany_IsNotAuthenticated_ShouldReturn_401_Nr2()
     {
         //Arrange
-        var sut = new SimpleController();
         sut.SetUserIsAuthenticated(false);
         
 
@@ -59,7 +64,6 @@ public class SimpleControllerTests
     public async Task GetCompany_IfAuthenticated_ShouldReturn_200Ok()
     {
         //Arrange
-        var sut = new SimpleController();
         sut.SetUserIsAuthenticated(true);
 
         //Act
