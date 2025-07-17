@@ -19,7 +19,13 @@ public class SimpleController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCompany()
     {
-
-        return Ok();
+        if (User?.Identity?.IsAuthenticated ?? false)
+        {
+            return Ok("User is authenticated");
+        }
+        else
+        {
+            return Unauthorized();
+        }
     }
 }
