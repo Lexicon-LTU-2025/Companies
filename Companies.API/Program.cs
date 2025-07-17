@@ -18,7 +18,7 @@ using Service.Contracts;
 using System.Configuration;
 using System.Security.Claims;
 using System.Text;
-
+//Presentation Project have access to almost everything after test demo its just for Demo purpose!!!!!
 namespace Companies.API
 {
     public class Program
