@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Security.Claims;
 
 namespace Controller.Tests;
 
@@ -33,6 +34,31 @@ public class SimpleControllerTests
 
         var sut = new SimpleController();
         sut.ControllerContext = controllerContext;
+
+        //Act
+        var result = await sut.GetCompany();
+        var resultType = result.Result as UnauthorizedResult;
+
+        //Assert
+        Assert.IsType<UnauthorizedResult>(resultType);
+        Assert.Equal(StatusCodes.Status401Unauthorized, resultType.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetCompany_IsNotAuthenticated_ShouldReturn_401_Nr2()
+    {
+        //Arrange
+        var claimsPrincipalMock = new Mock<ClaimsPrincipal>();
+        claimsPrincipalMock.SetupGet(x => x.Identity.IsAuthenticated).Returns(false);
+
+        var sut = new SimpleController();
+        sut.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = claimsPrincipalMock.Object,
+            }
+        };
 
         //Act
         var result = await sut.GetCompany();
