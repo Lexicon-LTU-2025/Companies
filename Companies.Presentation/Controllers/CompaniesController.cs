@@ -1,4 +1,5 @@
 ﻿using Companis.Shared.DTOs.CompanyDtos;
+using Companis.Shared.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,9 @@ namespace Companies.Presentation.Controllers
         [HttpGet]
       //  [AllowAnonymous]
         [Authorize(Roles = "Admin")] 
-        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees) =>
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(
+            bool includeEmployees,
+            [FromQuery] CompanyRequestParams companyRequestParams) =>
                  Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
 
         [HttpGet("{id:guid}")]
