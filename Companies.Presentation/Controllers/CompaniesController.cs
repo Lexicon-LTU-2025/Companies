@@ -25,8 +25,8 @@ namespace Companies.Presentation.Controllers
         [Authorize(Roles = "Admin")] 
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(
             bool includeEmployees,
-            [FromQuery] CompanyRequestParams companyRequestParams) =>
-                 Ok(await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees));
+            [FromQuery] CompanyRequestParameters companyRequestParams) =>
+                 Ok(await serviceManager.CompanyService.GetCompaniesAsync(companyRequestParams, includeEmployees));
 
         [HttpGet("{id:guid}")]
         [Authorize(Policy = "CanEdit")] 

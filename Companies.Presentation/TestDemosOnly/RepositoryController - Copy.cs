@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Companis.Shared.DTOs.CompanyDtos;
+using Companis.Shared.Requests;
 using Domain.Contracts.Repositories;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -33,7 +34,7 @@ public class RepositoryController2 : ControllerBase
         var user = await userService.GetUserAsync(User);
         if(user is null) ArgumentNullException.ThrowIfNull(user);
 
-        var companies = await companyRepository.GetCompaniesAsync(includeEmployees);
+        var companies = await companyRepository.GetCompaniesAsync(new CompanyRequestParameters(), includeEmployees);
         var dtos = mapper.Map<IEnumerable<CompanyDto>>(companies);
 
         return Ok(dtos);

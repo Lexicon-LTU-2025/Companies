@@ -17,7 +17,7 @@ public abstract class RequestBaseParameters
     }
 }
 
-public class CompanyRequestParams : RequestBaseParameters
+public class CompanyRequestParameters : RequestBaseParameters
 {
 
 }

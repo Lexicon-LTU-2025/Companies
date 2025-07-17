@@ -3,6 +3,7 @@ using Bogus;
 using Companies.Infractructure.Data;
 using Companies.Presentation.TestDemosOnly;
 using Companis.Shared.DTOs.CompanyDtos;
+using Companis.Shared.Requests;
 using Controller.Tests.Helpers;
 using Domain.Contracts.Repositories;
 using Domain.Models.Entities;
@@ -42,7 +43,7 @@ public class RepositoryControllerTests2
         //Arrange
         const int expectedCount = 2;
         var expectedCompanies = GetCompanies(expectedCount);
-        mockRepo.Setup(x => x.GetCompaniesAsync(false, It.IsAny<bool>())).ReturnsAsync(expectedCompanies);
+        mockRepo.Setup(x => x.GetCompaniesAsync(It.IsAny<CompanyRequestParameters>(),false, It.IsAny<bool>())).ReturnsAsync(expectedCompanies);
         userServiceMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser());
 
         //Act
