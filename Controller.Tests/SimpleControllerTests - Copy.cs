@@ -1,5 +1,7 @@
 ﻿using Companies.Presentation.TestDemosOnly;
+using Companis.Shared;
 using Controller.Tests.Extensions;
+using Controller.Tests.Fixtures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -7,9 +9,10 @@ using System.Security.Claims;
 
 namespace Controller.Tests;
 
-public class SimpleControllerTests2
+public class SimpleControllerTests2 : IClassFixture<DatabaseFixture>
 {
-    private SimpleController sut;
+    private SimpleController2 sut;
+    private readonly DatabaseFixture fixture;
 
     //[Fact]
     //public async Task GetCompany_ShouldReturn_StatusCode200Ok()
@@ -23,9 +26,10 @@ public class SimpleControllerTests2
     //    Assert.Equal(StatusCodes.Status200OK, resultType.StatusCode);
     //}
 
-    public SimpleControllerTests2()
+    public SimpleControllerTests2(DatabaseFixture fixture)
     {
-        sut = new SimpleController();
+        this.fixture = fixture;
+        sut = new SimpleController2(fixture.Context, fixture.Mapper);
     }
 
     [Fact]
@@ -74,6 +78,28 @@ public class SimpleControllerTests2
         Assert.IsType<OkObjectResult>(resultType);
         Assert.Equal(StatusCodes.Status200OK, resultType.StatusCode);
     }
+
+
+    [Fact]
+    public async Task GetCompany2_ShouldReturn_200Ok()
+    {
+        //Arrange
+        var actualNumberOfCompanies = fixture.Context.Companies.Count();
+        sut.SetUserIsAuthenticated(true);
+
+        //Act
+        var result = await sut.GetCompany2();
+        //var resultType = result.Result as OkObjectResult;
+
+        //Assert
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var t = ok.Value;
+        var companiesFromSut = Assert.IsType<List<CompanyDto>>(ok.Value);
+        Assert.Equal(StatusCodes.Status200OK, ok.StatusCode);
+        Assert.Equal(companiesFromSut.Count, actualNumberOfCompanies);
+    }
+
+
 
 
 }
