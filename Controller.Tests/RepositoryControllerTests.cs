@@ -21,15 +21,16 @@ using System.Threading.Tasks;
 namespace Controller.Tests;
 public class RepositoryControllerTests
 {
-    private Mock<ICompanyRepository> mockRepo;
     private Mock<UserManager<ApplicationUser>> userManagerMock;
     private RepositoryController sut;
+    private Mock<IUnitOfWork> mockUoW;
+    private const int expectedCount = 2;
 
     public RepositoryControllerTests()
     {
-        mockRepo = new Mock<ICompanyRepository>();
-        var mockUoW = new Mock<IUnitOfWork>();
-        mockUoW.Setup(x => x.CompanyRepository).Returns(mockRepo.Object);
+      
+        mockUoW = new Mock<IUnitOfWork>();
+        mockUoW.Setup(x => x.CompanyRepository.GetCompaniesAsync(false, false)).ReturnsAsync(GetCompanies(expectedCount));
 
         var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
         userManagerMock = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
@@ -41,9 +42,8 @@ public class RepositoryControllerTests
     public async Task GetCompany_ShouldReturnAllCompanies()
     {
         //Arrange
-        const int expectedCount = 2;
-        var expectedCompanies = GetCompanies(expectedCount);
-        mockRepo.Setup(x => x.GetCompaniesAsync(false, It.IsAny<bool>())).ReturnsAsync(expectedCompanies);
+        //var expectedCompanies = GetCompanies(expectedCount);
+        //mockUoW.Setup(x => x.CompanyRepository.GetCompaniesAsync(false, It.IsAny<bool>())).ReturnsAsync(expectedCompanies);
         userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser());
 
         //Act
