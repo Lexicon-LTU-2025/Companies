@@ -1,0 +1,25 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Companies.Presentation.TestDemosOnly;
+
+[Route("api/simple")]
+[ApiController]
+public class SimpleController : ControllerBase
+{
+    public SimpleController()
+    {
+
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCompany()
+    {
+
+        return Ok();
+    }
+}
