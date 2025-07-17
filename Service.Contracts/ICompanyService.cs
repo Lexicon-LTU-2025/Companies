@@ -1,5 +1,4 @@
-﻿
-using Companis.Shared;
+﻿using Companis.Shared.DTOs.CompanyDtos;
 
 namespace Service.Contracts;
 

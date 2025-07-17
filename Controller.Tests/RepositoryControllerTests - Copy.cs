@@ -2,7 +2,7 @@
 using Bogus;
 using Companies.Infractructure.Data;
 using Companies.Presentation.TestDemosOnly;
-using Companis.Shared;
+using Companis.Shared.DTOs.CompanyDtos;
 using Controller.Tests.Helpers;
 using Domain.Contracts.Repositories;
 using Domain.Models.Entities;

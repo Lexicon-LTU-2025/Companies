@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Companies.Infractructure.Data;
 using Companies.Infractructure.Repositories;
-using Companis.Shared;
+using Companis.Shared.DTOs.CompanyDtos;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

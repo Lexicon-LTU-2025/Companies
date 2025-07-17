@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Companis.Shared;
+namespace Companis.Shared.DTOs.EmployeeDtos;
 public record EmployeeDto
 {
     public required Guid Id { get; init; }

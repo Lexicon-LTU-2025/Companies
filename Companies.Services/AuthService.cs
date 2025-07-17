@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Companis.Shared;
+using Companis.Shared.DTOs.AuthDtos;
 using Domain.Contracts.Repositories;
 using Domain.Models.Configurations;
 using Domain.Models.Entities;

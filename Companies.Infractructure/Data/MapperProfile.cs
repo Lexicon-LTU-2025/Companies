@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using Companis.Shared;
+using Companis.Shared.DTOs.AuthDtos;
+using Companis.Shared.DTOs.CompanyDtos;
+using Companis.Shared.DTOs.EmployeeDtos;
 using Domain.Models.Entities;
 
 namespace Companies.Infractructure.Data;

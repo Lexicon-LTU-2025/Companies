@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Companis.Shared;
+using Companis.Shared.DTOs.EmployeeDtos;
 using Domain.Contracts.Repositories;
 using Service.Contracts;
 using System;

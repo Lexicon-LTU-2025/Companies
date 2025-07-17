@@ -1,4 +1,6 @@
-﻿namespace Companis.Shared;
+﻿using Companis.Shared.DTOs.EmployeeDtos;
+
+namespace Companis.Shared.DTOs.CompanyDtos;
 
 public record CompanyDto
 {

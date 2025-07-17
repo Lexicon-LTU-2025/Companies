@@ -1,4 +1,4 @@
-﻿using Companis.Shared;
+﻿using Companis.Shared.DTOs.EmployeeDtos;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 

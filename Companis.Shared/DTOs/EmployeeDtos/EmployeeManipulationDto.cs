@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Companis.Shared;
+namespace Companis.Shared.DTOs.EmployeeDtos;
 public record EmployeeManipulationDto
 {
     [Required(ErrorMessage = "Employee name is a required field.")]

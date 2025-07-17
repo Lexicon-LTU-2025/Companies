@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Companis.Shared.DTOs.EmployeeDtos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Companis.Shared;
+namespace Companis.Shared.DTOs.AuthDtos;
 public record UserRegistrationDto : EmployeeManipulationDto
 {
     [Required]

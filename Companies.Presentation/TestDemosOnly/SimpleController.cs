@@ -1,4 +1,4 @@
-﻿using Companis.Shared;
+﻿using Companis.Shared.DTOs.CompanyDtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

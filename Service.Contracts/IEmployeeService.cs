@@ -1,4 +1,4 @@
-﻿using Companis.Shared;
+﻿using Companis.Shared.DTOs.EmployeeDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

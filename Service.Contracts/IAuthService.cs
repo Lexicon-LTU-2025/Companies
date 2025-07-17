@@ -1,4 +1,4 @@
-﻿using Companis.Shared;
+﻿using Companis.Shared.DTOs.AuthDtos;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

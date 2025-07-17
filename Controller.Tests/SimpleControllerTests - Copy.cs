@@ -1,5 +1,5 @@
 ﻿using Companies.Presentation.TestDemosOnly;
-using Companis.Shared;
+using Companis.Shared.DTOs.CompanyDtos;
 using Controller.Tests.Extensions;
 using Controller.Tests.Fixtures;
 using Microsoft.AspNetCore.Http;

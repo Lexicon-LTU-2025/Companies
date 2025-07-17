@@ -1,4 +1,4 @@
-﻿using Companis.Shared;
+﻿using Companis.Shared.DTOs.AuthDtos;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using System;
