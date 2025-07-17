@@ -12,28 +12,28 @@ using System.Threading.Tasks;
 
 namespace Companies.Presentation.TestDemosOnly;
 
-[Route("api/repo")]
+[Route("api/repo2")]
 [ApiController]
-public class RepositoryController : ControllerBase
+public class RepositoryController2 : ControllerBase
 {
-    private readonly IUnitOfWork unitOfWork;
+    private readonly ICompanyRepository companyRepository;
     private readonly IMapper mapper;
-    private readonly UserManager<ApplicationUser> userManager;
+    private readonly IUserService userService;
 
-    public RepositoryController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<ApplicationUser> userManager)
+    public RepositoryController2(ICompanyRepository companyRepository, IMapper mapper, IUserService userManager)
     {
-        this.unitOfWork = unitOfWork;
+        this.companyRepository = companyRepository;
         this.mapper = mapper;
-        this.userManager = userManager;
+        this.userService = userManager;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Company>>> GetCompany(bool includeEmployees = false)
     {
-        var user = await userManager.GetUserAsync(User);
+        var user = await userService.GetUserAsync(User);
         if(user is null) ArgumentNullException.ThrowIfNull(user);
 
-        var companies = await unitOfWork.CompanyRepository.GetCompaniesAsync(includeEmployees);
+        var companies = await companyRepository.GetCompaniesAsync(includeEmployees);
         var dtos = mapper.Map<IEnumerable<CompanyDto>>(companies);
 
         return Ok(dtos);

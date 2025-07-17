@@ -19,22 +19,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Controller.Tests;
-public class RepositoryControllerTests
+public class RepositoryControllerTests2
 {
     private Mock<ICompanyRepository> mockRepo;
-    private Mock<UserManager<ApplicationUser>> userManagerMock;
-    private RepositoryController sut;
+    private Mock<IUserService> userServiceMock;
+    private RepositoryController2 sut;
 
-    public RepositoryControllerTests()
+    public RepositoryControllerTests2()
     {
         mockRepo = new Mock<ICompanyRepository>();
-        var mockUoW = new Mock<IUnitOfWork>();
-        mockUoW.Setup(x => x.CompanyRepository).Returns(mockRepo.Object);
 
-        var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-        userManagerMock = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+       // var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
+       // userManagerMock = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+        userServiceMock = new Mock<IUserService>();
 
-        sut = new RepositoryController(mockUoW.Object, MapperFactory.Create(), userManagerMock.Object);
+        sut = new RepositoryController2(mockRepo.Object, MapperFactory.Create(), userServiceMock.Object);
     }
 
     [Fact]
@@ -44,7 +43,7 @@ public class RepositoryControllerTests
         const int expectedCount = 2;
         var expectedCompanies = GetCompanies(expectedCount);
         mockRepo.Setup(x => x.GetCompaniesAsync(false, It.IsAny<bool>())).ReturnsAsync(expectedCompanies);
-        userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser());
+        userServiceMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser());
 
         //Act
         var result = await sut.GetCompany();
@@ -61,7 +60,7 @@ public class RepositoryControllerTests
     public async Task GetCompany_ShouldThrow_Exception()
     {
         //Arrange
-        userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(() => null);
+        userServiceMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(() => null);
 
         //Act
         //Assert
