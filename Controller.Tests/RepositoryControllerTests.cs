@@ -3,6 +3,7 @@ using Bogus;
 using Companies.Infractructure.Data;
 using Companies.Presentation.TestDemosOnly;
 using Companis.Shared;
+using Controller.Tests.Helpers;
 using Domain.Contracts.Repositories;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
@@ -24,14 +25,7 @@ public class RepositoryControllerTests
     public RepositoryControllerTests()
     {
         mockRepo = new Mock<ICompanyRepository>();
-
-        var configExpression = new MapperConfigurationExpression();
-        configExpression.AddProfile<MapperProfile>();
-
-        var config = new MapperConfiguration(configExpression, new LoggerFactory());
-        IMapper mapper = config.CreateMapper();
-
-        sut = new RepositoryController(mockRepo.Object, mapper);
+        sut = new RepositoryController(mockRepo.Object, MapperFactory.Create());
     }
 
     [Fact]
