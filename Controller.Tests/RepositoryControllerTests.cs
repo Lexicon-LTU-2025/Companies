@@ -7,12 +7,14 @@ using Controller.Tests.Helpers;
 using Domain.Contracts.Repositories;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,12 +22,17 @@ namespace Controller.Tests;
 public class RepositoryControllerTests
 {
     private Mock<ICompanyRepository> mockRepo;
+    private Mock<UserManager<ApplicationUser>> userManagerMock;
     private RepositoryController sut;
 
     public RepositoryControllerTests()
     {
         mockRepo = new Mock<ICompanyRepository>();
-        sut = new RepositoryController(mockRepo.Object, MapperFactory.Create());
+
+        var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
+        userManagerMock = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+
+        sut = new RepositoryController(mockRepo.Object, MapperFactory.Create(), userManagerMock.Object);
     }
 
     [Fact]
@@ -35,6 +42,7 @@ public class RepositoryControllerTests
         const int expectedCount = 2;
         var expectedCompanies = GetCompanies(expectedCount);
         mockRepo.Setup(x => x.GetCompaniesAsync(false, It.IsAny<bool>())).ReturnsAsync(expectedCompanies);
+        userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser());
 
         //Act
         var result = await sut.GetCompany();
@@ -45,6 +53,17 @@ public class RepositoryControllerTests
         Assert.Equal(actualCompanies?.Count, expectedCount);
 
 
+    }
+
+    [Fact]
+    public async Task GetCompany_ShouldThrow_Exception()
+    {
+        //Arrange
+        userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(() => null);
+
+        //Act
+        //Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.GetCompany());
     }
 
     private List<Company> GetCompanies(int numberOfCompanies)
