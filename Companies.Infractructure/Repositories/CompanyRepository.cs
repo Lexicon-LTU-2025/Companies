@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Companies.Infractructure.Repositories;
 public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
 {
@@ -21,17 +22,14 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
         return await FindByCondition(c => c.Id == id, trackChanges).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Company>> GetCompaniesAsync(CompanyRequestParameters companyRequestParameters, bool include = false, bool trackChanges = false)
+    public async Task<PagedList<Company>> GetCompaniesAsync(CompanyRequestParameters companyRequestParameters, bool trackChanges = false)
     {
-        return include ? await FindAll(trackChanges)
-                                 .Include(c => c.Employees)
-                                 .Skip((companyRequestParameters.PageNumber - 1) * companyRequestParameters.PageSize)
-                                 .Take(companyRequestParameters.PageSize)
-                                 .ToListAsync() :
+        return companyRequestParameters.IncludeEmployees ?
+                await FindAll(trackChanges)
+                         .Include(c => c.Employees)
+                         .ToPagedListAsync(companyRequestParameters.PageNumber, companyRequestParameters.PageSize) :
 
-                        await FindAll(trackChanges)
-                                 .Skip((companyRequestParameters.PageNumber - 1) * companyRequestParameters.PageSize)
-                                 .Take(companyRequestParameters.PageSize)
-                                 .ToListAsync();
+                await FindAll(trackChanges)
+                         .ToPagedListAsync(companyRequestParameters.PageNumber, companyRequestParameters.PageSize);
     }
 }

@@ -43,7 +43,7 @@ public class RepositoryControllerTests2
         //Arrange
         const int expectedCount = 2;
         var expectedCompanies = GetCompanies(expectedCount);
-        mockRepo.Setup(x => x.GetCompaniesAsync(It.IsAny<CompanyRequestParameters>(),false, It.IsAny<bool>())).ReturnsAsync(expectedCompanies);
+        mockRepo.Setup(x => x.GetCompaniesAsync(It.IsAny<CompanyRequestParameters>(), It.IsAny<bool>())).ReturnsAsync(new PagedList<Company>(expectedCompanies, 0, 1, expectedCount));
         userServiceMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser());
 
         //Act

@@ -20,6 +20,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Controller.Tests;
+
+
 public class RepositoryControllerTests
 {
     private Mock<UserManager<ApplicationUser>> userManagerMock;
@@ -31,10 +33,12 @@ public class RepositoryControllerTests
     {
       
         mockUoW = new Mock<IUnitOfWork>();
-        mockUoW.Setup(x => x.CompanyRepository.GetCompaniesAsync(It.IsAny<CompanyRequestParameters>() ,false, false)).ReturnsAsync(GetCompanies(expectedCount));
+        mockUoW.Setup(x => x.CompanyRepository.GetCompaniesAsync(It.IsAny<CompanyRequestParameters>(), false)).ReturnsAsync(new PagedList<Company>(GetCompanies(expectedCount),10, 1, expectedCount)
+            );
 
+        //ToDo make helper method!
         var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-        userManagerMock = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+        userManagerMock = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
         sut = new RepositoryController(mockUoW.Object, MapperFactory.Create(), userManagerMock.Object);
     }

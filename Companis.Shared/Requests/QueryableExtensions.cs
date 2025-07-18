@@ -3,10 +3,10 @@
 
 namespace Companis.Shared.Requests;
 
-public static class QuerableExtension
+public static class QueryableExtensions
 {
-    public static async Task<PagedList<T>> ToPagedList<T>(
-            IQueryable<T> source, int pageNumber, int pageSize)
+    public static async Task<PagedList<T>> ToPagedListAsync<T>(
+            this IQueryable<T> source, int pageNumber, int pageSize)
     {
         //ToDo: Not handled in ExceptionHandler middleware yet... Should return BadRequest and ProblemDetails
         if (pageNumber <= 0)

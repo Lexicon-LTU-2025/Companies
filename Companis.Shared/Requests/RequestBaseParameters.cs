@@ -16,8 +16,3 @@ public abstract class RequestBaseParameters
         set => pageSize = value > maxPageSize ? maxPageSize : value;
     }
 }
-
-public class CompanyRequestParameters : RequestBaseParameters
-{
-
-}

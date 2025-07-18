@@ -18,9 +18,11 @@ public class CompanyService : ICompanyService
         this.mapper = mapper;
     }
 
-    public async Task<IEnumerable<CompanyDto>> GetCompaniesAsync(CompanyRequestParameters requestParameters, bool includeEmployees, bool trackChanges = false)
+    public async Task<(IEnumerable<CompanyDto> companyDtos, MetaData metaData)> GetCompaniesAsync(CompanyRequestParameters requestParameters, bool trackChanges = false)
     {
-        return mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompaniesAsync(requestParameters ,includeEmployees, trackChanges));
+        var commpaniesWithMetaData = await uow.CompanyRepository.GetCompaniesAsync(requestParameters, trackChanges);
+        var companyDtos = mapper.Map<IEnumerable<CompanyDto>>(commpaniesWithMetaData.Items);
+        return (companyDtos, commpaniesWithMetaData.MetaData);
     }
 
     public async Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges = false)

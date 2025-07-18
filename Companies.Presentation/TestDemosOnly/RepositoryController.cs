@@ -29,12 +29,12 @@ public class RepositoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Company>>> GetCompany(bool includeEmployees = false)
+    public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
     {
         var user = await userManager.GetUserAsync(User);
         if(user is null) ArgumentNullException.ThrowIfNull(user);
 
-        var companies = await unitOfWork.CompanyRepository.GetCompaniesAsync(new CompanyRequestParameters(), includeEmployees);
+        var companies = await unitOfWork.CompanyRepository.GetCompaniesAsync(new CompanyRequestParameters());
         var dtos = mapper.Map<IEnumerable<CompanyDto>>(companies);
 
         return Ok(dtos);

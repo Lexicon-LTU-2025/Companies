@@ -2,8 +2,10 @@
 using Companis.Shared.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using System.Text.Json;
 
 namespace Companies.Presentation.Controllers
 {
@@ -24,9 +26,14 @@ namespace Companies.Presentation.Controllers
       //  [AllowAnonymous]
         [Authorize(Roles = "Admin")] 
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(
-            bool includeEmployees,
-            [FromQuery] CompanyRequestParameters companyRequestParams) =>
-                 Ok(await serviceManager.CompanyService.GetCompaniesAsync(companyRequestParams, includeEmployees));
+            [FromQuery] CompanyRequestParameters companyRequestParams)
+        {
+            var pagedResult = await serviceManager.CompanyService.GetCompaniesAsync(companyRequestParams);
+
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.companyDtos);
+        }
 
         [HttpGet("{id:guid}")]
         [Authorize(Policy = "CanEdit")] 
